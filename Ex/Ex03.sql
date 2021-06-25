@@ -293,7 +293,7 @@ select  employee_id,
             job_id, 'AC_ACCOUNT', salary+salary*0.1
                     'SA_REP' , salary+salary*0.2
                     'ST_CLEER',  salary+salary*0.3
-        ) as rSalary       
+        ) as rSalary'      
 from employees;
 
 
@@ -307,3 +307,25 @@ select employee_id,
             salary
        ) as realSalary    
 from employees;
+                    
+                    
+select  *
+from employees;
+
+select  *
+from departments;
+
+--join
+--'연관'된 두개 이상의 테이블을 합친다.
+select  first_name as 이름,
+        hire_date "입사일",
+        department_name as 부서이름,
+        em.department_id as emp의부서아이디,
+        em.manager_id 매니저아이디
+from employees em, departments de --얘는 태생이 as사용해서 별명 못붙임 그냥 써야함.
+where em.department_id = de.department_id;  --조건 없으면 employees, departments 테이블의 이름이랑 부서이름 싹다 조합함.
+
+
+
+select *        
+from employees em, departments de; --얘는 태생이 as사용해서 별명 못붙임 그냥 써야함.
