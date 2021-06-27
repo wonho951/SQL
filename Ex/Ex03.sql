@@ -117,19 +117,19 @@ group by department_id;
 /*그룹함수*/
 
 --단일행함수
-select first_name,
-       round(salary, -4)
+select first_name as 이름,
+       round(salary, -4) as 월급
 from employees;
 
 
 --그룹함수  --> 오류발생(반드시 이유를 확인할것!!!)
-select avg(salary)  --이름은 여러개가 나오지만
+select avg(salary) as 월급  --이름은 여러개가 나오지만
      --first_name  --avg는 모든 월급의 평균이기때문에 실행이 불가능하다.
 from employees;     --출력되는 양쪽의 개수가 맞아야한다.
 
 
 --그룹함수 avg()
-select avg(salary)
+select avg(salary) as 월급
 from employees;
 
 
