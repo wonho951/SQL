@@ -115,3 +115,37 @@ where em.manager_id = ma.employee_id;
 select  *
 from employees em, locations lo
 where em.salary = lo.location_id;   --> 전혀 상관이 없지만 우연히 값이 맞아 떨어졌기때문에 출력이 됨.
+
+
+
+/*SubQuery*/
+--하나의 SQL 질의문 속에 다른 SQL 질의문이 포함되어 있는 형태
+
+--‘Den’ 보다 급여를 많은 사람의 이름과 급여는?
+select  *
+from employees
+where first_name = 'Den'; -->Den의 급여는 11000
+
+
+--급여가 11000이상인 직원들
+select  *
+from employees
+where salary >= 11000;  --> Den의 급여가 11000일때 알수 있기 때문에 두번 일을 해야함
+
+
+--SubQuery
+--where절에 조건에 맞는 쿼리문을 하나 더 씀
+select  first_name 이름,
+        salary 급여
+from employees
+where salary >= (select salary 급여   --조건이 맞아야함
+                 from employees
+                 where first_name = 'Den')
+--위 두개의 지문을 조합해서 사용하는게 subquery                 
+/*
+* SubQuery 부분은 where 절의 연산자 오른쪽에 위치해야 하며 괄호로 묶어야한다.
+* 가급적 order by 를 하지 않는다. 
+* 단일행 SubQuery 와 다중행 SubQuery 에 따라 연산자를 잘 선택해야함 
+  현재 예제는 단일행  *다중행과 구분해서 사용해야함
+*/
+
