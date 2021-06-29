@@ -132,6 +132,36 @@ and e.department_id = tb.dp
 order by e.salary asc;
 
 
+
+/*문제8*/
+--부서별 평균급여 찾기
+select  department_id,
+        avg(salary)
+from employees
+group by department_id;
+
+--평균중 제일 높은 부서 찾기
+select  max(salary)
+from (select  department_id,
+              avg(salary) salary
+      from employees
+      group by department_id);
+      
+--두개 조합해서 평균급여 제일 높은 부서 찾기
+select  d.department_name --부서 이름만써주면됨
+from departments d, (select  department_id,
+                             avg(salary) avgsal
+                     from employees
+                     group by department_id) avgd, (select  max(salary) maxsal
+                                                    from (select  department_id,
+                                                                  avg(salary) salary
+                                                    from employees
+                                                    group by department_id)
+                                                    ) maxd
+where avgd.avgsal = maxd.maxsal
+and avgd.department_id = d.department_id;
+
+
 /*
 select  *
 from employees
