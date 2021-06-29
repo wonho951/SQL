@@ -78,21 +78,58 @@ and e.department_id = d.department_id;
 
 /*문제7*/
 --평균
-select  department_id,
+select  department_id ,
         avg(salary) avgSal
 from employees
 group by department_id;
 
 --평균중 가장 높은 연봉
-select  max(avgSal)
+select  max(avgSal) maxSal
 from (select  department_id,
               avg(salary) avgSal
       from employees
-      group by department_id) t;
+      group by department_id);
 
---하는중
-select  *
-from employees
+
+--평균연봉 부서 찾아내기
+select  avgsa.department_id dp,
+        avgsa.avgsal,
+        maxsa.maxsal
+from (select  department_id ,
+              avg(salary) avgSal
+      from employees
+      group by department_id) avgSa, (select  max(avgSal) maxSal
+                                      from (select  department_id,
+                                                    avg(salary) avgSal
+                                            from employees
+                                            group by department_id)
+                                      ) maxSa
+where avgsa.avgsal = maxsa.maxsal;
+
+
+--대입해서 직원 찾아내기
+select  e.employee_id 직원번호,
+        e.first_name 이름,
+        e.last_name 성,
+        tb.avgsal AVG_SALARY,
+        e.salary 급여,        
+        js.job_title 업무        
+from employees e, jobs js, (select  avgsa.department_id dp,
+                                    avgsa.avgsal,
+                                    maxsa.maxsal
+                            from (select  department_id ,
+                                          avg(salary) avgSal
+                                          from employees
+                                          group by department_id) avgSa, (select  max(avgSal) maxSal
+                                                                          from (select  department_id,
+                                                                          avg(salary) avgSal
+                                                                          from employees
+                                                                          group by department_id)
+                                                                          ) maxSa
+                            where avgsa.avgsal = maxsa.maxsal) tb
+where e.job_id = js.job_id
+and e.department_id = tb.dp
+order by e.salary asc;
 
 
 /*
