@@ -204,7 +204,7 @@ select  first_name,
         salary
 from employees
 where first_name like '_a%';
-
+	
 
 --이름의 네번째 글자가 a 인 사원의 이름을 출력하세요
 select  first_name,
