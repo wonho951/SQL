@@ -6,7 +6,7 @@ select  em.employee_id 사번,
         de.department_name 부서명
 from employees em, departments de
 where em.department_id = de.department_id
-order by em.department_id desc, de.department_name asc;
+order by em.department_id asc, de.department_name desc;
 
 /*문제2*/
 select  em.employee_id 사번,        
