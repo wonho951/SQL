@@ -86,7 +86,7 @@ group by department_id;
 --평균중 가장 높은 연봉
 select  max(avgSal) maxSal
 from (select  department_id,
-              avg(salary) avgSal
+              avg(salary) avgSal	--여기에 별명 안붙이면 max못구함
       from employees
       group by department_id);
 
