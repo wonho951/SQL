@@ -1,5 +1,5 @@
 /*join*/
---EQUI join. --> 가장 많이 씀
+--EQUI join. --> 가장 많이 씀--> null은 포함 안됨.
 select  e.employee_id,  --일관성있게 어느 테이블에 있는건지 표시해주는게 좋다.
         e.first_name,   --e는 소속이고 결국 최종으로는 first_name이기 때문에 별명 붙이는게 좋음.
         e.department_id,
@@ -33,8 +33,9 @@ where em.department_id = de.department_id
 and em.job_id = jo.job_id;
 --한번에 머리로 생각하지말고 따져봐야함.
 
-/*OUTER join*/
+/*OUTER join*/ 
 --종류 left outer join, right outer join, full outer join
+--> null 포함시켜야 할때
 
 --left outer join
 select  em.employee_id 직원아이디,
