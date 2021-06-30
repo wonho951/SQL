@@ -50,16 +50,29 @@ and e.department_id = d.department_id(+);
 
 /*문제5*/
 select  ot.rn,
-        ot.hire_date
-from  (select  rownum rn,
-             t.hire_date
-      from (select  hire_date
-            from employees
-            where hire_date > '04/12/31'
-            order by hire_date asc) t
-       ) ot
-where ot.rn >= 11
-and ot.rn <= 20;
+        ot.employee_id 사번,
+        ot.first_name 이름,
+        de.department_name 부서명,
+        ot.salary 급여,
+        ot.hire_date 입사일
+from departments de,(select  rownum rn,
+                             t.employee_id,
+                             t.first_name,
+                             t.department_id,
+                             t.salary,
+                             t.hire_date
+                     from (select  employee_id,
+                                   first_name,
+                                   department_id,
+                                   salary,
+                                   hire_date
+                           from employees
+                           where to_char(hire_date, 'yyyy-mm-dd') >= '2005'
+                           order by hire_date asc) t
+                       )ot
+where ot.department_id = de.department_id
+and ot.rn >= 11
+and ot.rn <=20;
 
 
 /*문제6*/
