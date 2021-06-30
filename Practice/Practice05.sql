@@ -40,10 +40,11 @@ group by manager_id;
 /*문제4*/
 select  e.employee_id 사번,
         e.first_name 이름,
-        e.department_id 부서명,
+        d.department_name 부서명,
         m.first_name 매니저이름
-from employees e, employees m
-where e.employee_id = m.manager_id;
+from employees e, employees m, departments d
+where e.employee_id = m.manager_id
+and e.department_id = d.department_id(+);
 
 
 
