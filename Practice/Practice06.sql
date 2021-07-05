@@ -78,7 +78,7 @@ select *
 from book;
 
 /*작가이름 수정*/
-update book               
+update author               
 set author_name = '이문열',
     author_desc = '경북 영양'
 where author_id = 1;
