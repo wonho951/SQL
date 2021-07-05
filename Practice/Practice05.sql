@@ -274,12 +274,6 @@ and jobavg.asal = jobmax.masl;
 
 
 
-
-
-
-
-
-
 /*
 select  *
 from employees
