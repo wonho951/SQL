@@ -27,13 +27,32 @@ where (department_id, salary) in (select  department_id,
 
 
 /*문제3*/
----하는중
+--매니저별로 묶기
 select  manager_id,
-        first_name,
+        avg(salary),
         max(salary),
-        min(salary)        
+        min(salary)
 from employees
-group by manager_id;
+where to_char(hire_date, 'yyyy') >= '2005'
+group by manager_id
+having avg(salary) >= 5000;
+
+
+--위에꺼 넣기
+select  e.employee_id,
+        e.first_name 매니저이름,
+        round(ma.avgsal, 0) "매니저별 평균 급여",
+        ma.maxsal "매니저별 최대 급여",
+        ma.minsal "매니저별 최소 급여"       
+from employees e, (select  manager_id,
+                           avg(salary) avgsal,
+                           max(salary) maxsal,
+                           min(salary) minsal
+                  from employees
+                  where to_char(hire_date, 'yyyy') >= '2005'
+                  group by manager_id
+                  having avg(salary) >= 5000) ma
+where e.employee_id = ma.manager_id;
 
 
 
@@ -56,20 +75,20 @@ select  ot.rn,
         ot.salary 급여,
         ot.hire_date 입사일
 from departments de,(select  rownum rn,
-                             t.employee_id,
-                             t.first_name,
-                             t.department_id,
-                             t.salary,
-                             t.hire_date
-                     from (select  employee_id,
-                                   first_name,
-                                   department_id,
-                                   salary,
-                                   hire_date
-                           from employees
-                           where to_char(hire_date, 'yyyy-mm-dd') >= '2005'
-                           order by hire_date asc) t
-                       )ot
+                            t.employee_id,
+                            t.first_name,
+                            t.department_id,
+                            t.salary,
+                            t.hire_date
+                    from (select  employee_id,
+                                  first_name,
+                                  department_id,
+                                  salary,
+                                  hire_date
+                          from employees
+                          where to_char(hire_date, 'yyyy-mm-dd') >= '2005'
+                          order by hire_date asc) t
+                      )ot
 where ot.department_id = de.department_id
 and ot.rn >= 11
 and ot.rn <=20;
@@ -174,6 +193,91 @@ from departments d, (select  department_id,
                                                     ) maxd
 where avgd.avgsal = maxd.maxsal
 and avgd.department_id = d.department_id;
+
+
+/*문제9*/
+--지역이랑 엮어야 하니까 지역이랑 급여를 맞춰줌
+select  r.region_name,
+        avg(salary)
+from employees e, departments d, locations l, countries c, regions r
+where e.department_id = d.department_id
+and d.location_id = l.location_id
+and l.country_id = c.country_id
+and c.region_id = r.region_id
+group by r.region_name;
+
+
+--max(salary)구함
+select  max(salary)
+from (select  r.region_name,
+              avg(salary) salary
+      from employees e, departments d, locations l, countries c, regions r
+      where e.department_id = d.department_id
+      and d.location_id = l.location_id
+      and l.country_id = c.country_id
+      and c.region_id = r.region_id
+      group by r.region_name) ms;
+
+
+--두개 조합해서 평균급여 제일 높은 나라 찾기
+select  avgr.rName region_name
+from (select  r.region_name rName,
+              avg(salary) avgs
+      from employees e, departments d, locations l, countries c, regions r
+      where e.department_id = d.department_id
+      and d.location_id = l.location_id
+      and l.country_id = c.country_id
+      and c.region_id = r.region_id
+      group by r.region_name) avgr, (select  max(salary) maxsal
+                                     from (select  r.region_name,
+                                                   avg(salary) salary
+                                           from employees e, departments d, locations l, countries c, regions r
+                                           where e.department_id = d.department_id
+                                           and d.location_id = l.location_id
+                                           and l.country_id = c.country_id
+                                           and c.region_id = r.region_id
+                                           group by r.region_name) ms
+                                    ) maxr
+where avgr.avgs = maxr.maxsal;
+
+
+
+/*문제10*/
+--job_id 평균 급여 구함
+select  job_id,
+        avg(salary)
+from employees
+group by job_id;
+
+
+--가장 높은거 구함
+select  max(salary)
+from (select  job_id,
+              avg(salary) salary
+      from employees
+      group by job_id);
+
+
+--두개 조합
+select  j.job_title
+from jobs j, (select  job_id,
+                      avg(salary) asal
+              from employees
+              group by job_id) jobavg, (select  max(salary) masl
+                                        from (select  job_id,
+                                                      avg(salary) salary
+                                              from employees
+                                              group by job_id)
+                                        ) jobmax
+where j.job_id = jobavg.job_id
+and jobavg.asal = jobmax.masl;
+
+
+
+
+
+
+
 
 
 /*
